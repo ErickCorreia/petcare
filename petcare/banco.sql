@@ -104,3 +104,25 @@ INSERT INTO pets (nome, especie, raca, data_nascimento, peso_kg, tutor_id) VALUE
 -- senha:  petcare123
 INSERT INTO usuarios (nome, email, senha_hash) VALUES
   ('Recepcao PetCare', 'admin@petcare.com', '$2y$10$QGAsPnHyzS6MD5IgtYdOq.Lddf3E/O8jcnC1LCwdXOGQvW6UjMF4a');
+
+
+--DELETE FROM tokens WHERE expira_em < NOW();
+
+---- 1. cria um token vencido (usuario 1 existe no seu banco.sql)
+--INSERT INTO tokens (usuario_id, token, expira_em)
+--VALUES (1, REPEAT('a', 64), NOW() - INTERVAL 1 HOUR);
+
+-- 2. confere que ele existe
+--SELECT id, usuario_id, expira_em FROM tokens;
+
+-- 3. limpa
+--DELETE FROM tokens WHERE expira_em < NOW();
+
+-- 4. confere que sumiu
+--SELECT id, usuario_id, expira_em FROM tokens;
+
+--SELECT p.id, p.nome, p.especie, p.raca, p.data_nascimento, p.peso_kg,
+--       p.tutor_id, t.nome AS tutor_nome
+--FROM pets p
+--INNER JOIN tutores t ON t.id = p.tutor_id
+--ORDER BY p.id; ou WHERE p.id = 1;
