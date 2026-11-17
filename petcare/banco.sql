@@ -126,3 +126,31 @@ INSERT INTO usuarios (nome, email, senha_hash) VALUES
 --FROM pets p
 --INNER JOIN tutores t ON t.id = p.tutor_id
 --ORDER BY p.id; ou WHERE p.id = 1;
+
+/**
+USE petcare;
+
+DELIMITER $$
+
+DROP PROCEDURE IF EXISTS listar_pets$$
+
+CREATE PROCEDURE listar_pets(IN p_pet_id INT)
+BEGIN
+    SELECT
+        p.id,
+        p.nome,
+        p.especie,
+        p.raca,
+        p.data_nascimento,
+        p.peso_kg,
+        p.tutor_id,
+        t.nome AS tutor_nome
+    FROM pets p
+    INNER JOIN tutores t ON t.id = p.tutor_id
+    WHERE p_pet_id IS NULL OR p.id = p_pet_id
+    ORDER BY p.id;
+END$$
+
+DELIMITER ;
+
+
