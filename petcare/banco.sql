@@ -132,8 +132,6 @@ USE petcare;
 
 DELIMITER $$
 
-DROP PROCEDURE IF EXISTS listar_pets$$
-
 CREATE PROCEDURE listar_pets(IN p_pet_id INT)
 BEGIN
     SELECT
@@ -152,5 +150,9 @@ BEGIN
 END$$
 
 DELIMITER ;
+
+CALL listar_pets(NULL);
+CALL listar_pets(1);
+
 
 
