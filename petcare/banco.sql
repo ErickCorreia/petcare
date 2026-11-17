@@ -1,23 +1,9 @@
--- =====================================================================
--- Trabalho 1 - API REST PetCare (PHP puro + MySQL)
--- Arquivo: banco.sql
---
--- O que este script faz:
---   1. Apaga o banco petcare se ele existir
---   2. Cria o banco e as 4 tabelas (tutores, pets, usuarios, tokens)
---   3. Insere os dados de exemplo (5 tutores, 11 pets, 1 usuario de teste)
---
 -- Como rodar:
 --   phpMyAdmin > aba Importar > escolher este arquivo > Executar
 --   ou no terminal: mysql -u root < banco.sql
 --
 -- REGRA DE EXCLUSAO ADOTADA: ON DELETE CASCADE
 --   Ao excluir um tutor, todos os pets dele sao apagados na mesma operacao.
---   Justificativa vai no README (arquivo 5).
---
--- ATENCAO: falta UM passo manual antes de commitar.
---   No INSERT de usuarios existe o marcador __HASH_DA_SENHA__.
---   Ele precisa ser trocado pelo hash real. Instrucoes no fim do arquivo.
 -- =====================================================================
 
 DROP DATABASE IF EXISTS petcare;
@@ -28,9 +14,6 @@ CREATE DATABASE petcare
 
 USE petcare;
 
--- ---------------------------------------------------------------------
--- tutores: os donos dos pets
--- ---------------------------------------------------------------------
 CREATE TABLE tutores (
   id        INT UNSIGNED NOT NULL AUTO_INCREMENT,
   nome      VARCHAR(100) NOT NULL,
@@ -64,10 +47,6 @@ CREATE TABLE pets (
   CONSTRAINT ck_pets_peso CHECK (peso_kg > 0 AND peso_kg <= 200)
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_unicode_ci;
 
--- ---------------------------------------------------------------------
--- usuarios: quem tem permissao de escrita na API (funcionarios)
--- senha_hash guarda o resultado de password_hash(), nunca a senha pura
--- ---------------------------------------------------------------------
 CREATE TABLE usuarios (
   id         INT UNSIGNED NOT NULL AUTO_INCREMENT,
   nome       VARCHAR(100) NOT NULL,
@@ -97,9 +76,6 @@ CREATE TABLE tokens (
     ON UPDATE CASCADE
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_unicode_ci;
 
--- ---------------------------------------------------------------------
--- DADOS DE EXEMPLO
--- ---------------------------------------------------------------------
 
 INSERT INTO tutores (id, nome, telefone, email) VALUES
   (1, 'Ana Paula Souza',      '(11) 98888-1010', 'ana.souza@email.com'),
@@ -128,26 +104,3 @@ INSERT INTO pets (nome, especie, raca, data_nascimento, peso_kg, tutor_id) VALUE
 -- senha:  petcare123
 INSERT INTO usuarios (nome, email, senha_hash) VALUES
   ('Recepcao PetCare', 'admin@petcare.com', '$2y$10$QGAsPnHyzS6MD5IgtYdOq.Lddf3E/O8jcnC1LCwdXOGQvW6UjMF4a');
-
--- Conferencia rapida (opcional, execute manualmente se quiser):
--- SELECT COUNT(*) FROM tutores;  -- esperado: 5
--- SELECT COUNT(*) FROM pets;     -- esperado: 11
--- SELECT t.nome, COUNT(p.id) FROM tutores t
---   LEFT JOIN pets p ON p.tutor_id = t.id GROUP BY t.id;
-
--- =====================================================================
--- PASSO MANUAL OBRIGATORIO (so uma vez, antes de commitar)
---
--- 1. Abra o terminal na pasta do PHP do XAMPP:
---      C:\xampp\php\
--- 2. Rode este comando:
---      php -r "echo password_hash('petcare123', PASSWORD_DEFAULT), PHP_EOL;"
--- 3. Copie a linha inteira que aparecer, algo como
---      $2y$10$AbCdEf...   (60 caracteres)
--- 4. Cole no lugar de __HASH_DA_SENHA__ no INSERT acima, mantendo as aspas.
--- 5. Rode o script e teste o login.
---
--- O hash muda a cada execucao do comando (o salt e aleatorio), mas todos
--- os gerados para 'petcare123' validam com password_verify. Este arquivo
--- NAO e entregavel enquanto o marcador __HASH_DA_SENHA__ estiver no lugar.
--- =====================================================================
