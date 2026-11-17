@@ -20,8 +20,8 @@
 | Nome completo | RA |
 | --- | --- |
 | Erick Correia Coelho | 22504188 |
-| (preencher) | (preencher) |
-| (preencher) | (preencher) |
+| Paulo Henrique Cardoso Rocha | 22503489 |
+| Artur Stange Felix | 22511644 |
 
 **Disciplina:** Desenvolvimento Web · **Professor:** Prof. Jr · **Entrega:** 08/12/2026
 
